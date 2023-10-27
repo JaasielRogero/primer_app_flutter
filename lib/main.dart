@@ -27,10 +27,19 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier{
   var current = WordPair.random();
+  var favoritos=<WordPair>[];
 
   void getSiguiete(){
     current = WordPair.random(); 
         notifyListeners();
+  }
+  void toggleFavoritos(){
+    if (favoritos.contains(current)) {
+      favoritos.remove(current);
+    }else{
+      favoritos.add(current);
+    }
+    notifyListeners();
   }
 }
 
@@ -40,6 +49,13 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     var appState=context.watch<MyAppState>();
+    var idea=appState.current;
+    IconData icon;
+    if (appState.favoritos.contains(idea)) {
+      icon=Icons.favorite;
+    }else{
+      icon=Icons.favorite_outline;
+    }
     return Scaffold(
       body: Center(
         child: Column(
@@ -47,11 +63,21 @@ class MyHomePage extends StatelessWidget {
           children: [
             BigCard(idea: appState.current),
             SizedBox(height: 20,),
-            ElevatedButton(
-              onPressed: () {
-                appState.getSiguiete();
-              }, 
-              child: Text("Siguiente")),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {appState.toggleFavoritos();}, 
+                  icon: Icon(icon),
+                  label: Text("Me gusta")),
+                SizedBox(width: 10,),
+                ElevatedButton(
+                  onPressed: () {
+                    appState.getSiguiete();
+                  }, 
+                  child: Text("Siguiente")),
+              ],
+            ),
             ],
         ),
       ),
