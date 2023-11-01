@@ -61,33 +61,37 @@ class _MyHomePageState extends State<MyHomePage> {
         default:
           throw UnimplementedError("No hay un widget para: $selectedIndex ");
       }
-    return Scaffold(
-      body: Row(
-        children: [
-          SafeArea(
-            child: NavigationRail(
-              extended: false,
-              destinations: [
-                NavigationRailDestination(
-                  icon: Icon(Icons.home), 
-                  label: Text("Inicio")),
-                NavigationRailDestination(
-                  icon: Icon(Icons.favorite), 
-                  label: Text("Favoritos"))
-              ],
-              selectedIndex: selectedIndex,
-              onDestinationSelected: (value){
-                setState(() {
-                  selectedIndex=value;
-                }); 
-              },
-            )
-          ),
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: page,)),
-        ],)
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Scaffold(
+          body: Row(
+            children: [
+              SafeArea(
+                child: NavigationRail(
+                  extended: constraints.maxWidth>=600,
+                  destinations: [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.home), 
+                      label: Text("Inicio")),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.favorite), 
+                      label: Text("Favoritos"))
+                  ],
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: (value){
+                    setState(() {
+                      selectedIndex=value;
+                    }); 
+                  },
+                )
+              ),
+              Expanded(
+                child: Container(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  child: page,)),
+            ],)
+        );
+      }
     );
   }
 }
